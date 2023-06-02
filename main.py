@@ -20,12 +20,12 @@ async def send_message(client, phone, message):
     return response_data
 
 
-async def send_bulk_message(client, phone_numbers, message):
+async def send_bulk_message(client, data):
     response_message_data_list = []
-    await import_contacts(client, phone_numbers)
+    await import_contacts(client, data['phone_numbers'])
 
-    for phone in phone_numbers:
-        message_response = await send_message(client, phone, message)
+    for phone in data['phone_numbers']:
+        message_response = await send_message(client, phone, data['message'])
         response_message_data_list.append(message_response)
 
     await delete_contacts(client, response_message_data_list)
