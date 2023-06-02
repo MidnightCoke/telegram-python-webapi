@@ -10,58 +10,47 @@ app = Flask(__name__)
 @app.route("/sendmessage", methods=["POST"])
 async def send_message_api():
     request_data = request.get_json()
+    response = await handle_send_message(request_data)
+    return jsonify(response)
+
+
+@app.route("/bulkmessage/ordinary", methods=["POST"])
+async def ordinary_bulk_message_api():
+    request_data = request.get_json()
+    response = await handle_bulk_message(request_data, send_bulk_message)
+    return jsonify(response)
+
+@app.route("/bulkmessage/exclusive", methods=["POST"])
+async def exclusive_bulk_message_api():
+    request_data = request.get_json()
+    response = await handle_bulk_message(request_data, send_bulk_message_exclusive)
+    return jsonify(response)
+
+async def handle_send_message(request_data):
     phone_number = request_data["data"]["phone_number"]
     message = request_data["data"]["message"]
     session_id = request_data["config"]["session_id"]
     api_id = request_data["config"]["api_id"]
     api_hash = request_data["config"]["api_hash"]
 
-    
-    client = TelegramClient(session_id, api_id, api_hash)
-
-    async with client:
+    async with TelegramClient(session_id, api_id, api_hash) as client:
         result = await send_message(client, phone_number, message)
 
     response_data = ResponseData(Status=200, Description="", Result=result)
-    return jsonify(response_data)
+    return response_data
 
 
-@app.route("/bulkmessage/ordinary", methods=["POST"])
-async def ordinary_bulk_message_api():
-    request_data = request.get_json()
-    session_id = request_data["config"]["session_id"]
-    api_id = request_data["config"]["api_id"]
-    api_hash = request_data["config"]["api_hash"]
-    phone_numbers = request_data["data"]["phone_numbers"]
-    message = request_data["data"]["message"]
-
-    
-    client = TelegramClient(session_id, api_id, api_hash)
-
-    async with client:
-        result = await send_bulk_message(client, phone_numbers, message)
-        
-    
-    response_data = ResponseData(Status=200, Description="", Result=result)
-    return jsonify(response_data)
-
-
-@app.route("/bulkmessage/exclusive", methods=["POST"])
-async def exclusive_bulk_message_api():
-    request_data = request.get_json()
+async def handle_bulk_message(request_data, send_func):
     session_id = request_data["config"]["session_id"]
     api_id = request_data["config"]["api_id"]
     api_hash = request_data["config"]["api_hash"]
     data = request_data["data"]
 
-    
-    client = TelegramClient(session_id, api_id, api_hash)
+    async with TelegramClient(session_id, api_id, api_hash) as client:
+        result = await send_func(client, data)
 
-    async with client:    
-        result = await send_bulk_message_exclusive(client, data)
-    
     response_data = ResponseData(Status=200, Description="", Result=result)
-    return jsonify(response_data)
+    return response_data
 
 
 if __name__ == "__main__":
