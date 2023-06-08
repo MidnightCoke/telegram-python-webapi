@@ -1,22 +1,6 @@
 # figensoft-telegram-python-webapi
 ###
-__Request model for /sendmessage :__
-```json
-{
-    "data": {
-        "phone_number": "905439619330",
-        "message": "test web api",
-        "id": 123456
-    },
-    "config": {
-        "api_id":"your_api_id",
-        "api_hash":"your_api_hash",
-        "session_id": "your_session_name"
-    }
-}
-```
-
-__Request model for /bulkmessage/ordinary :__
+__Request model for /bulkmessage/1_n :__
 ```json
 {
     "data": {
@@ -31,7 +15,7 @@ __Request model for /bulkmessage/ordinary :__
 }
 ```
 
-__Request model for /bulkmessage/exclusive :__
+__Request model for /bulkmessage/n_n :__
 ```json
 {
     "data": [
