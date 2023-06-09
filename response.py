@@ -2,10 +2,11 @@ from dataclasses import dataclass
 from typing import List
 
 @dataclass
-class MessageRequest:
+class MessageRequestResponse:
     phone_number: str
     id: int
     status: int
+    description: str
     message_id: int
 
 
@@ -13,4 +14,4 @@ class MessageRequest:
 class ResponseData:
     Status: int
     Description: str
-    Result: List[MessageRequest]
+    Result: List[MessageRequestResponse]
