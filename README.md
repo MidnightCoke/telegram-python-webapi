@@ -1,4 +1,5 @@
 # figensoft-telegram-python-webapi
+session id's should be sessions string
 ###
 __Request model for /bulkmessage/1_n :__
 ```json
@@ -10,7 +11,7 @@ __Request model for /bulkmessage/1_n :__
     "config": {
         "api_id":"your_api_id",
         "api_hash":"your_api_hash",
-        "session_id": "your_session_name"
+        "session_id": "your session string"
     }
 }
 ```
@@ -35,7 +36,7 @@ __Request model for /bulkmessage/n_n :__
     "config": {
         "api_id":"your_api_id",
         "api_hash":"your_api_hash",
-        "session_id": "your_session_name"
+        "session_id": "your session string"
     }
 }
 ```
